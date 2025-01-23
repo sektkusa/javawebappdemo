@@ -89,25 +89,28 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17' # Adjust based on your project's requirement
-
       # Step 3: Build the Spring Boot application
+      - name: Grant execute permission to Maven wrapper
+        run: chmod +x ./mvnw
+
+      # Step 4: Build the Spring Boot application
       - name: Build application
         run: |
           ./mvnw clean package -DskipTests
 
-      # Step 4: Run the application in the background
+      # Step 5: Run the application in the background
       - name: Run Spring Boot application
         run: |
           nohup java -jar target/*.jar > app.log 2>&1 &
           echo $! > app.pid
 
-      # Step 5: Verify the application is running
+      # Step 6: Verify the application is running
       - name: Verify application is running
         run: |
           sleep 10 # Wait for the application to start
           curl -v http://localhost:8080 || (echo "Application failed to start" && exit 1)
 
-      # Step 6: Optionally, tail the logs (for debugging)
+      # Step 7: Optionally, tail the logs (for debugging)
       - name: Tail application logs
         if: failure()
         run: cat app.log
