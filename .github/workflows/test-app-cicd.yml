@@ -110,6 +110,14 @@ jobs:
           sleep 10 # Wait for the application to start
           curl -v http://localhost:8080 || (echo "Application failed to start" && exit 1)
 
+      # Step: Expose API using localhost.run
+      - name: Expose API using localhost.run
+        run: |
+          ssh -R 80:localhost:8080 ssh.localhost.run > localhost-run.log &
+          sleep 5
+          grep -o 'https://.*.localhost.run' localhost-run.log > api-url.txt
+          echo "Public API URL: $(cat api-url.txt)"
+
       # Step 7: Optionally, tail the logs (for debugging)
       - name: Tail application logs
         if: failure()
