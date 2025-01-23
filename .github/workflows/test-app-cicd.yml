@@ -115,7 +115,6 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ssh.localhost.run >> ~/.ssh/known_hosts
 
       # Step: Expose API using localhost.run
       - name: Expose API using localhost.run
