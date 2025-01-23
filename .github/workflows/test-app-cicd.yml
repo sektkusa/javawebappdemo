@@ -110,14 +110,12 @@ jobs:
           sleep 10 # Wait for the application to start
           curl -v http://localhost:8080 || (echo "Application failed to start" && exit 1)
 
-      - name: Setup SSH Key
+      - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-      - name: Debug SSH Connection
-        run: |
-          ssh -vvv -o StrictHostKeyChecking=no -R 80:localhost:8080 ssh.localhost.run
+          ssh-keyscan -H ssh.localhost.run >> ~/.ssh/known_hosts
 
       # Step: Expose API using localhost.run
       - name: Expose API using localhost.run
